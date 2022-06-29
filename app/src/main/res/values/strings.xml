@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">gnss_dr</string>
+    <string name="title_activity_bottom_nav">BottomNavActivity</string>
+    <string name="settings">Settings</string>
+    <string name="map">Map</string>
+    <string name="log">GPS Logger</string>
+    <string name="title">Title</string>
+    <string name="subtitle">Subtitle</string>
+    <string name="track_satellites">Track Satellites</string>
+    <string name="lat">Lat:</string>
+    <string name="textview">TextView</string>
+    <string name="speed">Speed:</string>
+    <string name="height">Height</string>
+    <string name="placeholder">TextView</string>
+</resources>
