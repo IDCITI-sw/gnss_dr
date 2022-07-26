@@ -215,10 +215,10 @@ public class LogFragment extends Fragment   {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 logger.saveDataToFile();
-                logger.resetData();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        logger.resetData();
                         btnStart.performClick();
                     }
                 },1000);
@@ -228,6 +228,7 @@ public class LogFragment extends Fragment   {
         builder2.setNegativeButton("Stop Logging", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                logger.saveDataToFile();
                 logger.resetData();
                 dialogInterface.cancel();
                 btnStart.setEnabled(true);

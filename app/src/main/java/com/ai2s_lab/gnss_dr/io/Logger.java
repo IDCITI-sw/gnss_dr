@@ -1,10 +1,8 @@
 package com.ai2s_lab.gnss_dr.io;
 
 import android.app.Activity;
-import android.view.View;
-import android.widget.EditText;
+import android.os.Environment;
 
-import com.ai2s_lab.gnss_dr.R;
 import com.google.android.material.snackbar.Snackbar;
 import com.opencsv.CSVWriter;
 
@@ -18,7 +16,7 @@ import java.util.Locale;
 public class Logger {
 
     private String TAG = "LOG";
-    private String baseDir;
+    private File baseDir;
     private String fileName;
     private String filePath;
 
@@ -45,9 +43,8 @@ public class Logger {
     // Save received GNSS data to local directory
     public void saveDataToFile(){
         // fileName 형식 변경 - 현재위치_데이터획득시간(초까지 포함).csv
-
-        fileName = "gnss_log_" + getCurrentTime() + ".csv";
-        baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
+        fileName = "gnss_log_with_pos" + getCurrentTime() + ".csv";
+        baseDir = android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         filePath = baseDir + File.separator +  fileName;
 
         file = new File(filePath);
