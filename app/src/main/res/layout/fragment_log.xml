@@ -190,7 +190,7 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center_horizontal">
+                    android:layout_gravity="center_horizontal">
 
                     <TextView
                         android:id="@+id/text_log_x_title"
@@ -224,6 +224,13 @@
                         android:text="N/A"
                         tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
 
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal">
+
                     <TextView
                         android:id="@+id/text_log_speed_accuracy_title"
                         android:layout_width="wrap_content"
@@ -239,10 +246,126 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="N/A" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:id="@+id/start_pnt_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:text="starting point:"
+                        android:textAlignment="textEnd"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/start_pnt_disp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="N/A" />
+
+                    <TextView
+                        android:id="@+id/end_pnt_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginStart="10dp"
+                        android:text="ending point:"
+                        android:textAlignment="textEnd"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/end_pnt_disp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="N/A" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal" >
+
+                    <TextView
+                        android:id="@+id/distance_interval_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:text="Distance Interval(m):"
+                        android:textAlignment="textEnd"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/distance_interval_input"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="N/A" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:id="@+id/time_interval_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:text="Time Interval(s):"
+                        android:textAlignment="textEnd"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/time_interval_input"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="N/A" />
+
 
                 </TableRow>
 
             </TableLayout>
+
+            <EditText
+                android:id="@+id/input_starting_pnt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:textSize="12dp"
+                android:hint="Input starting point"
+                android:inputType="textPersonName"
+                android:textAlignment="center" />
+
+            <EditText
+                android:id="@+id/input_ending_pnt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:textSize="12dp"
+                android:hint="Input ending point"
+                android:inputType="textPersonName"
+                android:textAlignment="center" />
+
+            <EditText
+                android:id="@+id/time_interval_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:textSize="12dp"
+                android:hint="Time Interval"
+                android:inputType="textPersonName"
+                android:textAlignment="center" />
+
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

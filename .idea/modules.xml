@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/gnss_dr.iml" filepath="$PROJECT_DIR$/.idea/modules/gnss_dr.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/gnss_dr.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/gnss_dr.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/gnss_dr.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/gnss_dr.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/gnss_dr.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/gnss_dr.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/gnss_dr.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/gnss_dr.app.unitTest.iml" />
+    </modules>
+  </component>
+</project>

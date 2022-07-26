@@ -39,3 +39,4 @@ GNSS_DR tracks and logs global navigation satellite systems (GNSS)
 ## Authors
 - Hawon Park
 - Jeong Ho Shin
+- Hojung Lim

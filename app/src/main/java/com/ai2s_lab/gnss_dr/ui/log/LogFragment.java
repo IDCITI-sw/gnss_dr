@@ -1,25 +1,36 @@
 package com.ai2s_lab.gnss_dr.ui.log;
 
+import static android.content.Context.ALARM_SERVICE;
+
+import static java.lang.Thread.sleep;
+import static java.util.logging.Logger.global;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AlertDialogLayout;
 import androidx.cardview.widget.CardView;
 
 import androidx.fragment.app.Fragment;
 
+import com.ai2s_lab.gnss_dr.MainActivity;
 import com.ai2s_lab.gnss_dr.R;
 import com.ai2s_lab.gnss_dr.databinding.FragmentLogBinding;
 import com.ai2s_lab.gnss_dr.gnss.FusedRetriever;
@@ -36,8 +47,14 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.w3c.dom.Text;
+
+import java.sql.Time;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class LogFragment extends Fragment   {
 
@@ -65,6 +82,15 @@ public class LogFragment extends Fragment   {
     private TextView tvSpeedAccuracy;
     private TextView tvFixStatus;
 
+    private EditText input_start_pnt;
+    private EditText input_end_pnt;
+    private EditText input_time_interval;
+    private int start_pnt_value;
+    private int end_pnt_value;
+    private int tInterval;
+
+    private Handler handler;
+
     private Button btnStart;
     private Button btnReset;
     private Button btnSave;
@@ -87,6 +113,7 @@ public class LogFragment extends Fragment   {
 
     // alert dialog
     private AlertDialog.Builder builder;
+    private AlertDialog.Builder builder2;
 
     // constants for map
     private static final float DEFAULT_ZOOM = 17;
@@ -164,6 +191,11 @@ public class LogFragment extends Fragment   {
         builder.setMessage("Are you sure you want to write the log date to a CSV file?");
         builder.setCancelable(false);
 
+        builder2 = new AlertDialog.Builder(getActivity());
+        builder2.setTitle("Time Interval Finished");
+        builder.setMessage("Are you sure you want to proceed to next point?");
+        builder2.setCancelable(false);
+
         builder.setPositiveButton("Save File", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -176,6 +208,33 @@ public class LogFragment extends Fragment   {
             public void onClick(DialogInterface dialogInterface, int i) {
                 logger.resetData();
                 dialogInterface.cancel();
+            }
+        });
+
+        builder2.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                logger.saveDataToFile();
+                logger.resetData();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        btnStart.performClick();
+                    }
+                },1000);
+            }
+        });
+
+        builder2.setNegativeButton("Stop Logging", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                logger.resetData();
+                dialogInterface.cancel();
+                btnStart.setEnabled(true);
+                btnSave.setEnabled(false);
+                btnReset.setEnabled(false);
+                isLogging = false;
+                tvSubtitle.setText("Not Logging");
             }
         });
 
@@ -193,6 +252,9 @@ public class LogFragment extends Fragment   {
         mapView.onResume();
         dialogShown = false;
 
+        // Starting point & Ending point (in meters) into int value
+        input_start_pnt = (EditText) getActivity().findViewById(R.id.input_starting_pnt);
+        input_end_pnt = (EditText) getActivity().findViewById(R.id.input_ending_pnt);
 
         //Action handlers for logging buttons
         //save button
@@ -216,17 +278,49 @@ public class LogFragment extends Fragment   {
                 public void onClick(View view) {
                     Snackbar.make(getActivity().findViewById(android.R.id.content), "You have started logging!", Snackbar.LENGTH_SHORT).show();
 
-                    if(switchGnss.isChecked()){
-                        logger = new Logger(getActivity());
+                    TextView start_pnt = (TextView) getActivity().findViewById(R.id.start_pnt_disp);
+                    input_start_pnt = (EditText) getActivity().findViewById(R.id.input_starting_pnt);
 
-                        tvSubtitle.setText("Started Logging GPS Data");
-                        btnStart.setEnabled(false);
-                        btnSave.setEnabled(true);
-                        btnReset.setEnabled(true);
-                        isLogging = true;
-                    } else {
-                        Snackbar.make(getActivity().findViewById(android.R.id.content), "GNSS Is Off", Snackbar.LENGTH_SHORT).show();
+                    TextView end_pnt = (TextView) getActivity().findViewById(R.id.end_pnt_disp);
+                    input_end_pnt = (EditText) getActivity().findViewById(R.id.input_ending_pnt);
+
+                    TextView distance_interval = (TextView) getActivity().findViewById(R.id.distance_interval_input);
+                    TextView time_interval = (TextView) getActivity().findViewById(R.id.time_interval_input);
+                    input_time_interval = (EditText) getActivity().findViewById(R.id.time_interval_edittext);
+
+                    if (input_start_pnt.getText().toString() != "" && input_end_pnt.getText().toString() != "") {
+                        if(switchGnss.isChecked()){
+                            logger = new Logger(getActivity());
+
+                            tvSubtitle.setText("Started Logging GPS Data");
+                            btnStart.setEnabled(false);
+                            btnSave.setEnabled(false);
+                            btnReset.setEnabled(true);
+                            isLogging = true;
+
+                            start_pnt.setText(input_start_pnt.getText());
+                            // set start point value as an integer
+                            start_pnt_value = Integer.parseInt(input_start_pnt.getText().toString());
+
+                            end_pnt.setText(input_end_pnt.getText());
+                            //set end point value as an integer
+                            end_pnt_value = Integer.parseInt(input_end_pnt.getText().toString());
+
+                            distance_interval.setText(String.valueOf(end_pnt_value - start_pnt_value));
+                            time_interval.setText(input_time_interval.getText());
+
+                            tInterval = Integer.parseInt(input_time_interval.getText().toString()) * 1000;
+
+                            AlertDialog alertDialog2 = builder2.create();
+                            Timer timer = new Timer();
+                            timer.schedule(new SampleTask(timer, alertDialog2), tInterval);
+
+                        } else {
+                            Snackbar.make(getActivity().findViewById(android.R.id.content), "GNSS Is Off", Snackbar.LENGTH_SHORT).show();
+                        }
                     }
+
+
 
                 }
             });
@@ -441,4 +535,28 @@ public class LogFragment extends Fragment   {
     }
 
     public boolean getIsUsingGNSS(){ return this.isUsingGNSS; }
+
+    public class SampleTask extends TimerTask {
+        private Timer timer;
+        private AlertDialog alertDialog;
+
+        public SampleTask(Timer timer, AlertDialog alertDialog) {
+            this.timer = timer;
+            this.alertDialog = alertDialog;
+        }
+
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        @Override
+        public void run() {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    alertDialog.show();
+                    timer.cancel();
+                }
+            }, 0);
+        }
+    }
 }
+
