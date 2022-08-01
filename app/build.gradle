@@ -8,7 +8,11 @@ android {
     defaultConfig {
         applicationId "com.ai2s_lab.gnss_dr"
         minSdk 28
+<<<<<<< HEAD
         targetSdk 30
+=======
+        targetSdk 31
+>>>>>>> d10a4a1 (logger csv filename update)
         versionCode 1
         versionName "1.0"
 
@@ -40,6 +44,11 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.4.1'
     implementation 'androidx.navigation:navigation-ui:2.4.1'
     implementation 'com.google.android.gms:play-services-location:19.0.1'
+<<<<<<< HEAD
+=======
+    implementation 'org.tensorflow:tensorflow-lite-support:0.1.0'
+    implementation 'org.tensorflow:tensorflow-lite-metadata:0.1.0'
+>>>>>>> d10a4a1 (logger csv filename update)
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -50,4 +59,11 @@ dependencies {
     // Google Play Services
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
 
+<<<<<<< HEAD
+=======
+    // Tensorflow lite dependencies
+    implementation 'org.tensorflow:tensorflow-lite:2.8.0'
+    implementation 'org.tensorflow:tensorflow-lite-gpu:2.8.0'
+//    implementation 'org.tensorflow:tensorflow-lite-support:2.8.0'
+>>>>>>> d10a4a1 (logger csv filename update)
 }

@@ -89,6 +89,12 @@ public class LogFragment extends Fragment   {
     private int end_pnt_value;
     private int tInterval;
 
+<<<<<<< HEAD
+=======
+    private int posInMeter;
+    private int posPlus;
+
+>>>>>>> d10a4a1 (logger csv filename update)
     private Handler handler;
 
     private Button btnStart;
@@ -165,6 +171,11 @@ public class LogFragment extends Fragment   {
 
         tvUpdateFreq = binding.tvUpdateFrequency;
 
+<<<<<<< HEAD
+=======
+        posPlus = 0;
+
+>>>>>>> d10a4a1 (logger csv filename update)
         // initial states for logging buttons
         btnSave.setEnabled(false);
         btnReset.setEnabled(false);
@@ -199,7 +210,11 @@ public class LogFragment extends Fragment   {
         builder.setPositiveButton("Save File", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+<<<<<<< HEAD
                 logger.saveDataToFile();
+=======
+//                logger.saveDataToFile();
+>>>>>>> d10a4a1 (logger csv filename update)
             }
         });
 
@@ -214,11 +229,18 @@ public class LogFragment extends Fragment   {
         builder2.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+<<<<<<< HEAD
                 logger.saveDataToFile();
+=======
+>>>>>>> d10a4a1 (logger csv filename update)
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         logger.resetData();
+<<<<<<< HEAD
+=======
+                        posPlus++;
+>>>>>>> d10a4a1 (logger csv filename update)
                         btnStart.performClick();
                     }
                 },1000);
@@ -228,8 +250,13 @@ public class LogFragment extends Fragment   {
         builder2.setNegativeButton("Stop Logging", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+<<<<<<< HEAD
                 logger.saveDataToFile();
                 logger.resetData();
+=======
+                logger.resetData();
+                posPlus = 0;
+>>>>>>> d10a4a1 (logger csv filename update)
                 dialogInterface.cancel();
                 btnStart.setEnabled(true);
                 btnSave.setEnabled(false);
@@ -302,6 +329,10 @@ public class LogFragment extends Fragment   {
                             start_pnt.setText(input_start_pnt.getText());
                             // set start point value as an integer
                             start_pnt_value = Integer.parseInt(input_start_pnt.getText().toString());
+<<<<<<< HEAD
+=======
+                            posInMeter = start_pnt_value + posPlus;
+>>>>>>> d10a4a1 (logger csv filename update)
 
                             end_pnt.setText(input_end_pnt.getText());
                             //set end point value as an integer
@@ -314,7 +345,11 @@ public class LogFragment extends Fragment   {
 
                             AlertDialog alertDialog2 = builder2.create();
                             Timer timer = new Timer();
+<<<<<<< HEAD
                             timer.schedule(new SampleTask(timer, alertDialog2), tInterval);
+=======
+                            timer.schedule(new SampleTask(timer, alertDialog2, String.valueOf(posInMeter)), tInterval);
+>>>>>>> d10a4a1 (logger csv filename update)
 
                         } else {
                             Snackbar.make(getActivity().findViewById(android.R.id.content), "GNSS Is Off", Snackbar.LENGTH_SHORT).show();
@@ -540,6 +575,7 @@ public class LogFragment extends Fragment   {
     public class SampleTask extends TimerTask {
         private Timer timer;
         private AlertDialog alertDialog;
+<<<<<<< HEAD
 
         public SampleTask(Timer timer, AlertDialog alertDialog) {
             this.timer = timer;
@@ -547,12 +583,28 @@ public class LogFragment extends Fragment   {
         }
 
         Handler handler = new Handler(Looper.getMainLooper());
+=======
+        private String pos;
+
+        public SampleTask(Timer timer, AlertDialog alertDialog, String pos) {
+            this.timer = timer;
+            this.alertDialog = alertDialog;
+            this.pos = pos;
+        }
+
+        Handler handler = new Handler(Looper.getMainLooper());
+        private Logger logger = new Logger(getActivity());
+>>>>>>> d10a4a1 (logger csv filename update)
 
         @Override
         public void run() {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+<<<<<<< HEAD
+=======
+                    logger.saveDataToFile(pos);
+>>>>>>> d10a4a1 (logger csv filename update)
                     alertDialog.show();
                     timer.cancel();
                 }

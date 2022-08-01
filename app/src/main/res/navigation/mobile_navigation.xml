@@ -16,4 +16,13 @@
         android:name="com.ai2s_lab.gnss_dr.ui.settings.SettingsFragment"
         android:label="@string/settings"
         tools:layout="@layout/fragment_settings" />
+<<<<<<< HEAD
+=======
+
+    <fragment
+        android:id="@+id/navigation_infer"
+        android:name="com.ai2s_lab.gnss_dr.ui.inference.InferFragment"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_infer" />
+>>>>>>> d10a4a1 (logger csv filename update)
 </navigation>

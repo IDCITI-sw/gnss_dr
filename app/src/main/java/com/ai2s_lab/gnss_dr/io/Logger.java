@@ -41,10 +41,17 @@ public class Logger {
     }
 
     // Save received GNSS data to local directory
+<<<<<<< HEAD
     public void saveDataToFile(){
         // fileName 형식 변경 - 현재위치_데이터획득시간(초까지 포함).csv
         fileName = "gnss_log_with_pos" + getCurrentTime() + ".csv";
         baseDir = android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+=======
+    public void saveDataToFile(String i){
+        // fileName 형식 변경 - 현재위치_데이터획득시간(초까지 포함).csv
+        fileName = i + "m" + ".csv";
+        baseDir = android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+>>>>>>> d10a4a1 (logger csv filename update)
         filePath = baseDir + File.separator +  fileName;
 
         file = new File(filePath);
