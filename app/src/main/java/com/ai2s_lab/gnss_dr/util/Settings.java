@@ -7,11 +7,8 @@ public class Settings {
 
     public Settings(){}
 
-<<<<<<< HEAD
-=======
     public  static void setGps() {gps = true;}
 
->>>>>>> d10a4a1 (logger csv filename update)
     public static boolean getGPS(){
         return gps;
     }

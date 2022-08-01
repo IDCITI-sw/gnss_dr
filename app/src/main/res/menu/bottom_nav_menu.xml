@@ -11,12 +11,8 @@
         android:icon="@drawable/ic_baseline_settings_24"
         android:title="@string/settings" />
 
-<<<<<<< HEAD
-=======
     <item
         android:id="@+id/navigation_infer"
         android:icon="@drawable/ic_baseline_map_24"
         android:title="@string/infer" />
-
->>>>>>> d10a4a1 (logger csv filename update)
 </menu>

@@ -294,7 +294,9 @@ public class LogFragment extends Fragment   {
                     TextView time_interval = (TextView) getActivity().findViewById(R.id.time_interval_input);
                     input_time_interval = (EditText) getActivity().findViewById(R.id.time_interval_edittext);
 
-                    if (input_start_pnt.getText().toString() != "" && input_end_pnt.getText().toString() != "") {
+                    if(input_start_pnt.getText().toString().matches("")  && input_end_pnt.getText().toString().matches("") ) {
+                        Snackbar.make(getActivity().findViewById(android.R.id.content), "type in starting and ending point!!", Snackbar.LENGTH_SHORT).show();
+                    } else {
                         if(switchGnss.isChecked()){
                             logger = new Logger(getActivity());
 
