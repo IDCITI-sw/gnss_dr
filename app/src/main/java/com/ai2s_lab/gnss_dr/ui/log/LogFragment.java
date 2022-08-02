@@ -460,7 +460,7 @@ public class LogFragment extends Fragment   {
         tvLogTitle.setText("Using FusedLocationProvider");
         logSats.setVisibility(View.INVISIBLE);
         tvNumSat.setText("N/A");
-        tvFixStatus.setVisibility(View.INVISIBLE);
+        tvFixStatus.setVisibility(View.VISIBLE);
         gnssRetriever.setCanUpdateUI(false);
         fusedRetriever.setCanUpdateUI(true);
         fusedRetriever.requestData();
@@ -481,10 +481,10 @@ public class LogFragment extends Fragment   {
         }
         // GPS Off
         else{
-            tvUpdateFreq.setVisibility(View.INVISIBLE);
+            tvUpdateFreq.setVisibility(View.VISIBLE);
             tvLogTitle.setText("GPS is turned off!");
             switchGnss.setText("GPS Off");
-            tvFixStatus.setVisibility(View.INVISIBLE);
+            tvFixStatus.setVisibility(View.VISIBLE);
             switchGnss.setChecked(false);
             btnMap.setEnabled(false);
             resetList();
