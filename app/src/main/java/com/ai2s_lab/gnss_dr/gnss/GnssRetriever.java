@@ -108,8 +108,11 @@ public class GnssRetriever {
 
             if(logFragment.isLogging){
                 Log.d(TAG, "time logging: " + time_as_string);
-                String [] temp = {Double.toString(latitude), Double.toString(longitude), Double.toString(speed), Double.toString(altitude), "" , Double.toString(bearing), time_as_string};
-                logFragment.getLogger().addData(temp);
+                String [] temp = {Double.toString(latitude), Double.toString(longitude), Double.toString(speed), Double.toString(altitude), Integer.toString(satCount) , Double.toString(bearing), time_as_string};
+                if (location.hasAltitude() && satCount >= 3) {
+                    logFragment.getLogger().addData(temp);
+                }
+//                logFragment.getLogger().addData(temp);
                 logFragment.updateSubtitle(logFragment.getLogger().getDataCount());
             }
 
@@ -176,7 +179,10 @@ public class GnssRetriever {
 
                     if(logFragment.isLogging){
                         String [] temp = {"", "", "", "", "", "", Integer.toString(sat_vid), sat_constellation_name, Boolean.toString(sat_is_used), Double.toString(sat_elevation), Double.toString(sat_azim_degree), Double.toString(sat_car_t_noise_r)};
-                        logFragment.getLogger().addData(temp);
+                        if (tempSatCount >= 3) {
+                            logFragment.getLogger().addData(temp);
+                        }
+//                        logFragment.getLogger().addData(temp);
                     }
                 }
             }

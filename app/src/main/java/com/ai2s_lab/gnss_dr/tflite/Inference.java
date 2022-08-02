@@ -191,11 +191,11 @@ public class Inference {
 
                     if (sat_type == 1){ // GPS
                         gps_ids.add(sat_vid);
-                        Satellite satellite = new Satellite(sat_vid, sat_constellation_name, sat_is_used, sat_elevation, sat_azim_degree, sat_car_t_noise_r);
+                        Satellite gps_satellite = new Satellite(sat_vid, sat_constellation_name, sat_is_used, sat_elevation, sat_azim_degree, sat_car_t_noise_r);
                         gps_satellites.add(satellite);
                     } else if (sat_type == 3){ // GLONASS
                         gln_ids.add(sat_vid);
-                        Satellite satellite = new Satellite(sat_vid, sat_constellation_name, sat_is_used, sat_elevation, sat_azim_degree, sat_car_t_noise_r);
+                        Satellite gln_satellite = new Satellite(sat_vid, sat_constellation_name, sat_is_used, sat_elevation, sat_azim_degree, sat_car_t_noise_r);
                         gln_satellites.add(satellite);}
                 }
             }

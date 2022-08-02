@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
 public class Logger {
 
     private String TAG = "LOG";
@@ -42,7 +43,7 @@ public class Logger {
 
     // Save received GNSS data to local directory
     public void saveDataToFile(String i){
-        // fileName 형식 변경 - 현재위치_데이터획득시간(초까지 포함).csv
+        // fileName 형식 변경 - 현재위치_데이터_획득시간(초까지 포함).csv
         fileName = i + "m" + ".csv";
         baseDir = android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
         filePath = baseDir + File.separator +  fileName;
