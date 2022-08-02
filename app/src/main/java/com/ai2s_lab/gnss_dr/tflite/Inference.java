@@ -203,7 +203,7 @@ public class Inference {
             satCount = satellites.size();
 
             // === Model Inference ===
-            if (tempSatCount > 0)
+            if (satellites.size() > 0)  // When Satellites used in fix Exist.
                 PositionEstimate(gps_satellites, gln_satellites, gps_ids, gln_ids);
         }
     };
