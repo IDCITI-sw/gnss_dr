@@ -45,6 +45,12 @@ public class Inference {
     // variables
     private int currPos = -1;
 
+    // ArrayList
+    private ArrayList<Satellite> gps_satellites;
+    private ArrayList<Satellite> gln_satellites;
+    private ArrayList<Integer> gps_ids;
+    private ArrayList<Integer> gln_ids;
+
     // parameters for inference
     private double latitude = 0;
     private double longitude = 0;
@@ -117,6 +123,8 @@ public class Inference {
 
             }
 
+            PositionEstimate(gps_satellites, gln_satellites, gps_ids, gln_ids);
+
             String provider = location.getProvider();
 
             Log.d(TAG, "lat: " + latitude
@@ -156,10 +164,11 @@ public class Inference {
             int tempSatCount = status.getSatelliteCount();
 
             ArrayList<Satellite> satellites = new ArrayList<>();
-            ArrayList<Satellite> gps_satellites = new ArrayList<>();
-            ArrayList<Satellite> gln_satellites = new ArrayList<>();
-            ArrayList<Integer> gps_ids = new ArrayList<Integer>();
-            ArrayList<Integer> gln_ids = new ArrayList<Integer>();
+            gps_satellites = new ArrayList<>();
+            gln_satellites = new ArrayList<>();
+            gps_ids = new ArrayList<Integer>();
+            gln_ids = new ArrayList<Integer>();
+
 
             for (int i = 0; i < tempSatCount; i++) {
                 sat_type = status.getConstellationType(i);
@@ -179,42 +188,23 @@ public class Inference {
 
                     Satellite satellite = new Satellite(sat_vid, sat_constellation_name, sat_is_used, sat_elevation, sat_azim_degree, sat_car_t_noise_r);
                     satellites.add(satellite);
+
+                    if (sat_type == 1){ // GPS
+                        gps_ids.add(sat_vid);
+                        Satellite satellite = new Satellite(sat_vid, sat_constellation_name, sat_is_used, sat_elevation, sat_azim_degree, sat_car_t_noise_r);
+                        gps_satellites.add(satellite);
+                    } else if (sat_type == 3){ // GLONASS
+                        gln_ids.add(sat_vid);
+                        Satellite satellite = new Satellite(sat_vid, sat_constellation_name, sat_is_used, sat_elevation, sat_azim_degree, sat_car_t_noise_r);
+                        gln_satellites.add(satellite);}
                 }
-                if (sat_type == 1){ // GPS
-                    gps_ids.add(sat_vid);
-                    Satellite satellite = new Satellite(sat_vid, sat_constellation_name, sat_is_used, sat_elevation, sat_azim_degree, sat_car_t_noise_r);
-                    gps_satellites.add(satellite);
-                } else if (sat_type == 3){ // GLONASS
-                    gln_ids.add(sat_vid);
-                    Satellite satellite = new Satellite(sat_vid, sat_constellation_name, sat_is_used, sat_elevation, sat_azim_degree, sat_car_t_noise_r);
-                    gln_satellites.add(satellite);}
             }
 
             satCount = satellites.size();
 
             // === Model Inference ===
-            FloatBuffer input = prepareInput(gps_satellites, gln_satellites, gps_ids, gln_ids);
-            FloatBuffer output = FloatBuffer.allocate(NUM_CATEGORY);
-            try{
-                interpreter.run(input, output);
-                output.rewind();
-                float[] result = output.array();
-                Log.d(TAG,"interpreter result: " + Arrays.toString(result));
-
-                int pos = 0;
-                if (currPos < 0) {
-                    for (int i = 0; i < NUM_CATEGORY; i++)
-                        if (result[pos] < result[i]) pos = i;
-                } else {
-                    for (int i = currPos - 5; i < currPos + 5; i++)
-                        if(result[pos] < result[i]) pos = i;
-                }
-                currPos = pos;
-                Log.e(TAG,"infered current position: " + currPos);
-                inferFragment.setTvCurrPos(currPos);
-            } catch (Exception e){
-                e.printStackTrace();
-            }
+            if (tempSatCount > 0)
+                PositionEstimate(gps_satellites, gln_satellites, gps_ids, gln_ids);
         }
     };
 
@@ -247,6 +237,35 @@ public class Inference {
         }
     }
 
+    // Position Estimation with RF Features
+    private void PositionEstimate(ArrayList<Satellite> gps_satellites,
+                                  ArrayList<Satellite> gln_satellites,
+                                  ArrayList<Integer> gps_ids,
+                                  ArrayList<Integer> gln_ids){
+        FloatBuffer input = prepareInput(gps_satellites, gln_satellites, gps_ids, gln_ids);
+        FloatBuffer output = FloatBuffer.allocate(NUM_CATEGORY);
+        try{
+            interpreter.run(input, output);
+            output.rewind();
+            float[] result = output.array();
+            Log.d(TAG,"interpreter result: " + Arrays.toString(result));
+
+            int pos = 0;
+            if (currPos < 0) {
+                for (int i = 0; i < NUM_CATEGORY; i++)
+                    if (result[pos] < result[i]) pos = i;
+            } else {
+                for (int i = currPos - 5; i < currPos + 5; i++)
+                    if(result[pos] < result[i]) pos = i;
+            }
+            currPos = pos;
+            Log.e(TAG,"infered current position: " + currPos);
+            inferFragment.setTvCurrPos(currPos);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     private FloatBuffer prepareInput(ArrayList<Satellite> gps_satellites,
                                      ArrayList<Satellite> gln_satellites,
                                      ArrayList<Integer> gps_ids,
@@ -267,7 +286,7 @@ public class Inference {
             arr[i*3 + 6] = 0;   // CNO
 
             int index = gps_ids.indexOf(i+1);
-            if (index > 0){
+            if (index > -1){
                 Satellite satellite = gps_satellites.get(index);
                 arr[i*3 + 4] = (float) satellite.getElev();   // Elev
                 arr[i*3 + 5] = (float) satellite.getAzim();   // Azim
@@ -281,7 +300,7 @@ public class Inference {
             arr[(i+32)*3 + 6] = 0;   // CNO
 
             int index = gln_ids.indexOf(i+1);
-            if (index > 0){
+            if (index > -1){
                 Satellite satellite = gln_satellites.get(index);
                 arr[(i+32)*3 + 4] = (float) satellite.getElev();   // Elev
                 arr[(i+32)*3 + 5] = (float) satellite.getAzim();   // Azim
