@@ -322,7 +322,7 @@ public class LogFragment extends Fragment   {
 
                             AlertDialog alertDialog2 = builder2.create();
                             Timer timer = new Timer();
-                            timer.schedule(new SampleTask(timer, alertDialog2, String.valueOf(posInMeter)), tInterval);
+                            timer.schedule(new SampleTask(timer, alertDialog2, String.valueOf(posInMeter), logger), tInterval);
 
                         } else {
                             Snackbar.make(getActivity().findViewById(android.R.id.content), "GNSS Is Off", Snackbar.LENGTH_SHORT).show();
@@ -548,6 +548,7 @@ public class LogFragment extends Fragment   {
     public class SampleTask extends TimerTask {
         private Timer timer;
         private AlertDialog alertDialog;
+        private Logger logger;
 
         public SampleTask(Timer timer, AlertDialog alertDialog) {
             this.timer = timer;
@@ -557,13 +558,12 @@ public class LogFragment extends Fragment   {
         Handler handler = new Handler(Looper.getMainLooper());
         private String pos;
 
-        public SampleTask(Timer timer, AlertDialog alertDialog, String pos) {
+        public SampleTask(Timer timer, AlertDialog alertDialog, String pos, Logger logger) {
             this.timer = timer;
             this.alertDialog = alertDialog;
             this.pos = pos;
+            this.logger = logger;
         }
-
-        private Logger logger = new Logger(getActivity());
 
         @Override
         public void run() {
